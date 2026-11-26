@@ -1,0 +1,14 @@
+# /etc/cloudflared/config.yml (sanitized template)
+# Zero-port-forwarding ingress routing via encrypted Cloudflare Argo Tunnel
+
+tunnel: <CLOUDFLARE_TUNNEL_ID>
+credentials-file: /etc/cloudflared/<CLOUDFLARE_TUNNEL_ID>.json
+
+ingress:
+  - hostname: app.yourdomain.com
+    service: http://localhost:3000
+  - hostname: dashboard.yourdomain.com
+    service: http://localhost:8088
+  - hostname: n8n.yourdomain.com
+    service: http://localhost:5678
+  - service: http_status:404

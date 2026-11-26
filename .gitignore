@@ -1,0 +1,26 @@
+# Secrets & environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.json
+!package.json
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local runtime data, databases & logs
+data/
+logs/
+*.log
+*.sqlite
+*.db
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+.vscode/

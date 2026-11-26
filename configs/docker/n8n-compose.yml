@@ -1,0 +1,28 @@
+# /home/serveradmin/n8n/docker-compose.yml (sanitized template)
+# Tuned for 4 GB RAM (< 512 MB cap) and mechanical/slow flash HDD longevity
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: always
+    ports:
+      # Loopback-only binding: exposed only via local Cloudflare Tunnel
+      - "127.0.0.1:5678:5678"
+    environment:
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - N8N_HOST=n8n.yourdomain.com
+      - WEBHOOK_URL=https://n8n.yourdomain.com/
+      - N8N_EDITOR_BASE_URL=https://n8n.yourdomain.com/
+      - N8N_PROXY_HOPS=1
+      - GENERIC_TIMEZONE=Asia/Kolkata
+      - TZ=Asia/Kolkata
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168
+      - EXECUTIONS_DATA_PRUNE_MAX_COUNT=50000
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - NODE_OPTIONS=--max-old-space-size=512
+    volumes:
+      # Host directory owned by UID/GID 1000:1000 (embedded SQLite storage)
+      - ./data:/home/node/.n8n

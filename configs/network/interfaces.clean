@@ -1,0 +1,8 @@
+# /etc/network/interfaces
+# Kept strictly minimal so ifupdown never conflicts with NetworkManager on wlp2s0.
+# NetworkManager manages wlp2s0 via DHCP (router 192.168.1.1) and writes /etc/resolv.conf.
+
+source /etc/network/interfaces.d/*
+
+auto lo
+iface lo inet loopback

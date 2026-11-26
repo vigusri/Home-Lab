@@ -1,0 +1,20 @@
+# /etc/systemd/system/n8n.service
+# Headless auto-start unit for Dockerized n8n under non-root user isolation
+
+[Unit]
+Description=n8n Workflow Automation Platform
+After=network-online.target docker.service
+Wants=network-online.target docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/serveradmin/n8n
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose down
+TimeoutStartSec=300
+User=serveradmin
+Group=serveradmin
+
+[Install]
+WantedBy=multi-user.target
