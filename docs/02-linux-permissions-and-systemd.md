@@ -31,6 +31,8 @@ To operate securely on a home network without exposing raw host ports or running
 
 Headless servers must recover cleanly after power outages without manual login:
 
+* **`aurabase-dashboard.service` ([`configs/systemd/aurabase-dashboard.service`](../configs/systemd/aurabase-dashboard.service)):**
+  * Runs the Python monitoring daemon under `User=serveradmin`, `Group=serveradmin`, `Nice=10` (low CPU scheduling priority), and `Restart=always`.
 * **`n8n.service` ([`configs/systemd/n8n.service`](../configs/systemd/n8n.service)):**
   * Orders startup strictly after `network-online.target` and `docker.service`.
   * Executes `docker compose up -d` / `down` under `User=serveradmin` and `Group=serveradmin`.

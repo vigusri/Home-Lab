@@ -1,0 +1,17 @@
+[Unit]
+Description=Aurabase Real-Time Lightweight Server Monitoring Dashboard
+After=network.target docker.service
+
+[Service]
+Type=simple
+User=serveradmin
+Group=serveradmin
+WorkingDirectory=/opt/aurabase-dashboard
+ExecStart=/usr/bin/python3 /opt/aurabase-dashboard/server.py
+Restart=always
+RestartSec=3
+KillMode=process
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

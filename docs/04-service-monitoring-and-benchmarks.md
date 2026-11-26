@@ -6,9 +6,13 @@ Running services continuously on older laptop hardware requires active visibilit
 
 ## 1. Service & Hardware Monitoring
 
-* **Real-Time Web Dashboard (`localhost:8088`):**
-  * Lightweight Python monitoring service (`/opt/aurabase-dashboard/server.py`) exposed privately over the Cloudflare Tunnel.
-  * Displays real-time hardware sensors, thermal readings, memory budget, and live Docker container states (`multi-channel-extractor`, `n8n`).
+* **Live Real-Time Web Dashboard — [https://dashboard.aurabase.systems/](https://dashboard.aurabase.systems/)**
+  * **Source & Service:** [`dashboard/server.py`](../dashboard/server.py) managed by [`configs/systemd/aurabase-dashboard.service`](../configs/systemd/aurabase-dashboard.service) (`localhost:8088`, exposed via encrypted Cloudflare Tunnel).
+  * **Zero-Dependency Design:** Uses only the Python 3 standard library (`http.server`, `threading`, `socket`, `json`) with access logging silenced to prevent unnecessary disk writes (`< 15 MB` RAM).
+  * **Live Telemetry Endpoints:**
+    * `/` — Self-contained live dashboard polling every `1.2s`
+    * `/api/stats` — JSON feed combining `/proc/stat`, `/proc/meminfo`, `/proc/net/dev`, `/sys/class/hwmon` (`k10temp`, `amdgpu`), `BAT1` & `ideapad_acpi` conservation mode, `os.statvfs("/")`, and `docker ps` container health
+    * `/health` — Plain-text `OK` readiness probe
 * **CLI Health & Log Verification:**
   * [`scripts/health-check.sh`](../scripts/health-check.sh) automates routine checks across network routing, DNS, `systemd` units (`cloudflared`, `n8n.service`, `docker`), container status, and hardware sensors.
   * Service logs audited via `journalctl -u cloudflared -n 50` and `docker compose logs --tail=50`.

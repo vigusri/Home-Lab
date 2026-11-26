@@ -3,6 +3,9 @@
 **Debian 13 (Trixie) · CLI Administration · Linux Permissions · DNS & Router Troubleshooting · Service Monitoring · Docker & Cloudflare Tunnel**  
 *Project Period: Sep 2026 – Nov 2026*
 
+> **Live Server Health Dashboard:** **[https://dashboard.aurabase.systems/](https://dashboard.aurabase.systems/)**  
+> Real-time telemetry served directly from the Debian 13 host via [`dashboard/server.py`](dashboard/server.py) (zero-dependency Python 3 daemon, `< 15 MB` RAM) — showing live CPU/GPU temperatures, TLP battery conservation status, memory/disk utilization, Wi-Fi I/O, and active Docker containers.
+
 ---
 
 ## Project Overview
@@ -26,7 +29,7 @@ Rather than relying on managed cloud VMs, this lab demonstrates end-to-end **Lin
 | **Core CLI Administration** | Headless Debian 13 setup, `systemd` service units, `sysctl` kernel tuning, `tlp` ACPI battery bypass, resource budgeting (< 4 GB RAM) | [`01-system-and-hardware-tuning.md`](docs/01-system-and-hardware-tuning.md) |
 | **Linux File Permissions** | Non-root `serveradmin` service isolation, container UID/GID (`1000:1000`) volume ownership, strict settings permissions, loopback-only port binding | [`02-linux-permissions-and-systemd.md`](docs/02-linux-permissions-and-systemd.md) |
 | **Local Network & DNS Troubleshooting** | Root-cause analysis using `ip`, `ping`, `/etc/resolv.conf`, `/etc/network/interfaces`, `NetworkManager`, and router DHCP logs (`192.168.1.1`) | [`03-network-dns-troubleshooting.md`](docs/03-network-dns-troubleshooting.md) |
-| **Service Monitoring & Reliability** | Real-time thermal/container dashboard (`sensors` + Docker health), `journalctl` log inspection, `ab` load testing, SQLite execution pruning | [`04-service-monitoring-and-benchmarks.md`](docs/04-service-monitoring-and-benchmarks.md) |
+| **Service Monitoring & Reliability** | Real-time thermal/container web dashboard ([`dashboard.aurabase.systems`](https://dashboard.aurabase.systems/) · [`dashboard/server.py`](dashboard/server.py)), `journalctl` log inspection, `ab` load testing, SQLite execution pruning | [`04-service-monitoring-and-benchmarks.md`](docs/04-service-monitoring-and-benchmarks.md) |
 
 ---
 
@@ -81,9 +84,11 @@ Full technical write-up: [`docs/03-network-dns-troubleshooting.md`](docs/03-netw
 
 ```text
 Home-Lab/
-├── README.md                                   # Project overview & resume mapping
+├── README.md                                   # Project overview, live dashboard link & resume mapping
 ├── .env.example                                # Environment template (no secrets committed)
 ├── .gitignore                                  # Excludes secrets, logs, and local data
+├── dashboard/
+│   └── server.py                               # Live server health dashboard (https://dashboard.aurabase.systems/)
 ├── docs/
 │   ├── 01-system-and-hardware-tuning.md        # Debian 13, TLP AC bypass, sysctl I/O & RAM tuning
 │   ├── 02-linux-permissions-and-systemd.md     # User isolation, UID/GID volume permissions, systemd
@@ -93,7 +98,9 @@ Home-Lab/
 │   ├── network/interfaces.clean                # Loopback-only /etc/network/interfaces
 │   ├── sysctl/99-homelab-tuning.conf           # Dirty page & swappiness kernel parameters
 │   ├── tlp/tlp-conservation.conf               # Laptop AC-bypass battery conservation config
-│   ├── systemd/n8n.service                     # Auto-start systemd unit for containerized automation
+│   ├── systemd/
+│   │   ├── aurabase-dashboard.service          # Systemd unit for live monitoring dashboard
+│   │   └── n8n.service                         # Auto-start systemd unit for containerized automation
 │   ├── cloudflared/config.example.yml          # Sanitized Cloudflare Tunnel ingress routing
 │   └── docker/n8n-compose.yml                  # Low-RAM SQLite Docker Compose configuration
 └── scripts/
